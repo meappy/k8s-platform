@@ -1,0 +1,20 @@
+# Secrets (never commit)
+**/secrets/*.yaml
+!**/secrets/*.yaml.example
+
+# Helm
+*.tgz
+charts/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.bak

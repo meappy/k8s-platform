@@ -1,0 +1,26 @@
+# cert-manager configuration
+# See: https://cert-manager.io/docs/installation/helm/
+
+cert-manager:
+  # Install CRDs
+  installCRDs: true
+
+  # Prometheus monitoring
+  prometheus:
+    enabled: false
+
+  # Webhook
+  webhook:
+    timeoutSeconds: 30
+
+  # Resources
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+  # Replica count (single node cluster)
+  replicaCount: 1

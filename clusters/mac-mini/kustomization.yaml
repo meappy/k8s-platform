@@ -1,0 +1,18 @@
+# Mac Mini cluster configuration
+# This kustomization file can be used to apply cluster-specific patches
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: mac-mini-cluster
+
+# Base resources from infrastructure
+resources: []
+
+# Cluster-specific patches can be added here
+# patches:
+#   - path: patches/traefik-nodeport.yaml
+#     target:
+#       kind: Service
+#       name: traefik

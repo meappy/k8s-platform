@@ -1,0 +1,11 @@
+apiVersion: v2
+name: cert-manager
+description: Certificate management with Cloudflare Origin CA
+type: application
+version: 1.0.0
+appVersion: "1.14.0"
+
+dependencies:
+  - name: cert-manager
+    version: "1.14.3"
+    repository: "https://charts.jetstack.io"

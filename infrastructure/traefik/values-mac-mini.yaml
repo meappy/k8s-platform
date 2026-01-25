@@ -1,0 +1,18 @@
+# Mac Mini cluster-specific Traefik configuration
+
+traefik:
+  # Use NodePort for external access via Raspberry Pi nginx
+  service:
+    type: NodePort
+
+  ports:
+    web:
+      nodePort: 30080
+    websecure:
+      nodePort: 30443
+
+  # Enable access logs for debugging
+  logs:
+    access:
+      enabled: true
+      format: json

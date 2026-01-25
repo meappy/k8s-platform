@@ -1,0 +1,85 @@
+# ArgoCD App-of-Apps pattern
+# This application manages all other applications
+#
+# Apply manually after ArgoCD is installed:
+#   kubectl apply -f apps/root.yaml
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/meappy/k8s-platform.git
+    targetRevision: main
+    path: apps
+    directory:
+      recurse: true
+      exclude: "root.yaml"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+# Infrastructure applications managed by ArgoCD
+# These are deployed after initial bootstrap
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/meappy/k8s-platform.git
+    targetRevision: main
+    path: infrastructure/traefik
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-mac-mini.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/meappy/k8s-platform.git
+    targetRevision: main
+    path: infrastructure/cert-manager
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

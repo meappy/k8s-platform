@@ -1,0 +1,59 @@
+# ArgoCD configuration
+# See: https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd
+
+argo-cd:
+  # Server configuration
+  server:
+    # Insecure mode (TLS handled by Traefik)
+    extraArgs:
+      - --insecure
+
+    # Service type
+    service:
+      type: ClusterIP
+
+    # Ingress via Traefik IngressRoute (configured separately)
+    ingress:
+      enabled: false
+
+  # Redis HA disabled for single-node cluster
+  redis-ha:
+    enabled: false
+
+  # Controller
+  controller:
+    replicas: 1
+
+  # Repo server
+  repoServer:
+    replicas: 1
+
+  # Application set controller
+  applicationSet:
+    replicas: 1
+
+  # Notifications controller
+  notifications:
+    enabled: true
+
+  # Configs
+  configs:
+    params:
+      # Allow insecure connections (TLS at ingress)
+      server.insecure: true
+
+    cm:
+      # URL for ArgoCD
+      url: https://argocd.meappy.me
+
+      # Enable status badge
+      statusbadge.enabled: true
+
+      # Resource tracking
+      resource.exclusions: |
+        - apiGroups:
+            - cilium.io
+          kinds:
+            - CiliumIdentity
+          clusters:
+            - "*"
