@@ -7,9 +7,9 @@ traefik:
 
   ports:
     web:
-      nodePort: 30080
+      nodePort: 30180  # Different from kumon-marker (30080)
     websecure:
-      nodePort: 30443
+      nodePort: 30543  # Different from ArgoCD (30443)
 
   # Enable access logs for debugging
   logs:

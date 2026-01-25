@@ -1,13 +1,11 @@
-{{- /*
-  ClusterIssuers for certificate management.
-
-  For Cloudflare setup:
-  - External TLS: Cloudflare edge → Raspberry Pi nginx (Origin certs)
-  - Internal TLS: Traefik → Services (self-signed CA)
-
-  The Origin certificates are managed in Cloudflare dashboard and
-  stored on the Raspberry Pi, not in Kubernetes.
-*/ -}}
+# ClusterIssuers for certificate management.
+#
+# For Cloudflare setup:
+# - External TLS: Cloudflare edge → Raspberry Pi nginx (Origin certs)
+# - Internal TLS: Traefik → Services (self-signed CA)
+#
+# The Origin certificates are managed in Cloudflare dashboard and
+# stored on the Raspberry Pi, not in Kubernetes.
 
 ---
 # Self-signed CA for internal cluster TLS
