@@ -1,0 +1,20 @@
+aws-ebs-csi-driver:
+  controller:
+    # k3s single-AZ cluster - 1 replica is sufficient
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+      limits:
+        memory: 128Mi
+
+  node:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+      limits:
+        memory: 128Mi
+
+  storageClasses: []

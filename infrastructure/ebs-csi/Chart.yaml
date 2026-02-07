@@ -1,0 +1,11 @@
+apiVersion: v2
+name: ebs-csi
+description: AWS EBS CSI Driver for persistent volume support on k3s
+type: application
+version: 1.0.0
+appVersion: "1.55.0"
+
+dependencies:
+  - name: aws-ebs-csi-driver
+    version: "2.55.1"
+    repository: "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
