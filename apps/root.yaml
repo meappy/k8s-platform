@@ -92,17 +92,14 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  sources:
-    - repoURL: https://github.com/meappy/k8s-platform.git
-      targetRevision: main
-      path: infrastructure/minio
-      helm:
-        valueFiles:
-          - values.yaml
-          - $secrets/minio/values-secrets.yaml
-    - repoURL: https://github.com/meappy/k8s-platform-secrets.git
-      targetRevision: main
-      ref: secrets
+  source:
+    repoURL: https://github.com/meappy/k8s-platform.git
+    targetRevision: main
+    path: infrastructure/minio
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-secrets.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: minio
