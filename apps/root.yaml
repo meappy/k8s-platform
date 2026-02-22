@@ -83,3 +83,32 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/meappy/k8s-platform.git
+      targetRevision: main
+      path: infrastructure/minio
+      helm:
+        valueFiles:
+          - values.yaml
+          - $secrets/minio/values-secrets.yaml
+    - repoURL: https://github.com/meappy/k8s-platform-secrets.git
+      targetRevision: main
+      ref: secrets
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: minio
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: minio
+description: MinIO object storage for cluster-wide use
+type: application
+version: 1.0.0
+appVersion: "2024.12.18"
+
+dependencies:
+  - name: minio
+    version: "5.4.0"
+    repository: "https://charts.min.io"

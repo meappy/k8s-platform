@@ -18,3 +18,10 @@ metadata:
   name: cert-manager
   labels:
     app.kubernetes.io/managed-by: k8s-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: minio
+  labels:
+    app.kubernetes.io/managed-by: k8s-platform
