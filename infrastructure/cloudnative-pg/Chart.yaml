@@ -1,0 +1,11 @@
+apiVersion: v2
+name: cloudnative-pg
+description: CloudNativePG operator for HA PostgreSQL
+type: application
+version: 1.0.0
+appVersion: "1.25.1"
+
+dependencies:
+  - name: cloudnative-pg
+    version: "0.23.0"
+    repository: "https://cloudnative-pg.github.io/charts"

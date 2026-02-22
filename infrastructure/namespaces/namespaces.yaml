@@ -25,3 +25,10 @@ metadata:
   name: minio
   labels:
     app.kubernetes.io/managed-by: k8s-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cnpg-system
+  labels:
+    app.kubernetes.io/managed-by: k8s-platform
