@@ -19,6 +19,9 @@ traefik:
       nodePort: 30080
       expose: true
       protocol: TCP
+      proxyProtocol:
+        trustedIPs:
+          - 10.200.0.0/16
 
     # Websecure (HTTPS)
     websecure:
@@ -29,6 +32,9 @@ traefik:
       protocol: TCP
       tls:
         enabled: true
+      proxyProtocol:
+        trustedIPs:
+          - 10.200.0.0/16
 
     # Traefik dashboard
     traefik:
