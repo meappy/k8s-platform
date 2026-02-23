@@ -2,6 +2,10 @@
 # See: https://github.com/traefik/traefik-helm-chart
 
 traefik:
+  # Service account - must mount token for Traefik to access K8s API
+  serviceAccount:
+    automountServiceAccountToken: true
+
   # Deployment
   deployment:
     replicas: 1
