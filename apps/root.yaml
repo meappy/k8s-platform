@@ -48,7 +48,6 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-        - values-mac-mini.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: traefik
