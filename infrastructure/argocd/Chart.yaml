@@ -3,9 +3,9 @@ name: argocd
 description: ArgoCD GitOps continuous delivery
 type: application
 version: 1.0.0
-appVersion: "2.10.0"
+appVersion: "3.3.0"
 
 dependencies:
   - name: argo-cd
-    version: "5.51.6"
+    version: "9.4.2"
     repository: "https://argoproj.github.io/argo-helm"

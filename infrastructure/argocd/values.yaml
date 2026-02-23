@@ -2,12 +2,13 @@
 # See: https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd
 
 argo-cd:
+  # CRDs managed by the chart
+  crds:
+    install: true
+    keep: true
+
   # Server configuration
   server:
-    # Insecure mode (TLS handled by Traefik)
-    extraArgs:
-      - --insecure
-
     # Service type
     service:
       type: ClusterIP
