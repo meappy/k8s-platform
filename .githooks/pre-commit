@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Pre-commit hook: enforce branch naming and lint Helm charts
+# Install: git config core.hooksPath .githooks
+
+set -euo pipefail
+
+# ── Enforce branch naming ─────────────────────────────────────────────────────
+# Must match: feat/, feature/, fix/
+# main and dev are protected (no direct commits)
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "dev" ]; then
+    echo "pre-commit: direct commits to $BRANCH are not allowed. Use a feature branch and PR."
+    echo "  git checkout -b feat/my-change"
+    exit 1
+fi
+
+if ! echo "$BRANCH" | grep -qE '^(feat|feature|fix)/'; then
+    echo "pre-commit: branch '$BRANCH' doesn't match required pattern."
+    echo "  Branch must start with: feat/, feature/, or fix/"
+    echo "  Example: git checkout -b feat/my-change"
+    exit 1
+fi
+
+# ── Helm lint ─────────────────────────────────────────────────────────────────
+
+STAGED_HELM=$(git diff --cached --name-only --diff-filter=ACM -- 'infrastructure/**' 'apps/**')
+
+if [ -n "$STAGED_HELM" ]; then
+    if ! command -v helm &>/dev/null; then
+        echo "pre-commit: helm not found, skipping Helm lint"
+    else
+        echo "pre-commit: helm lint on modified charts..."
+        # Find unique chart directories from staged files
+        CHARTS=$(echo "$STAGED_HELM" | sed 's|/[^/]*$||' | sort -u | while read dir; do
+            if [ -f "$dir/Chart.yaml" ]; then
+                echo "$dir"
+            fi
+        done)
+        for chart in $CHARTS; do
+            echo "  linting $chart..."
+            helm lint "$chart" --quiet
+        done
+    fi
+fi
