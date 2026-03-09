@@ -1,4 +1,10 @@
-# k8s-platform
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/banner-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/banner-light.svg">
+    <img alt="k8s-platform" src="docs/banner-dark.svg" width="800">
+  </picture>
+</p>
 
 <p align="center">
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
