@@ -1,20 +1,15 @@
 # Security Policy
 
-## Supported Versions
-
-| Version | Supported |
-| ------- | --------- |
-| Latest  | Yes       |
-
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability, please report it responsibly.
 
-**Do not open a public issue.** Instead, email **gerald@meappy.com** with:
+**Do not open a public issue.** Instead, use
+[GitHub's private vulnerability reporting](https://github.com/meappy/k8s-platform/security/advisories/new).
 
-- A description of the vulnerability
-- Steps to reproduce the issue
-- Any relevant logs or screenshots
+We will acknowledge receipt within 48 hours and aim to provide a fix or
+mitigation within 7 days for critical issues.
 
-You can expect an initial response within 48 hours. We will work with you to
-understand and address the issue before any public disclosure.
+## Supported Versions
+
+Only the latest release is actively supported with security updates.

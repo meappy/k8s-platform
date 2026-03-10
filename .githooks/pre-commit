@@ -1,46 +1,88 @@
 #!/usr/bin/env bash
-# Pre-commit hook: enforce branch naming and lint Helm charts
-# Install: git config core.hooksPath .githooks
+# Pre-commit hook: enforce branch naming and prevent direct commits to protected branches
+#
+# Install (run once per clone):
+#   git config core.hooksPath .githooks
+#
+# Branch naming convention:
+#   feat/<description>     — New features
+#   fix/<description>      — Bug fixes
+#   docs/<description>     — Documentation only changes
+#   refactor/<description> — Code refactoring
+#
+# Work item linking (customise for your project):
+#   Azure DevOps:  feat/AB<id>-<description>   → AB#<id> in commits
+#   Atlassian Jira: feat/SHCO-<id>-<description> → SHCO-<id> in commits
 
 set -euo pipefail
 
-# ── Enforce branch naming ─────────────────────────────────────────────────────
-# Must match: feat/, feature/, fix/
-# main and dev are protected (no direct commits)
-
+# ── Enforce protected branches ───────────────────────────────────────────────
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "dev" ]; then
-    echo "pre-commit: direct commits to $BRANCH are not allowed. Use a feature branch and PR."
-    echo "  git checkout -b feat/my-change"
+    echo ""
+    echo "  ❌ pre-commit: direct commits to '$BRANCH' are not allowed."
+    echo ""
+    echo "  Create a feature branch and open a PR instead:"
+    echo "    git checkout -b feat/<short-description>"
+    echo ""
+    echo "  Examples:"
+    echo "    git checkout -b feat/announcement-banner"
+    echo "    git checkout -b fix/login-redirect"
+    echo ""
     exit 1
 fi
 
-if ! echo "$BRANCH" | grep -qE '^(feat|feature|fix)/'; then
-    echo "pre-commit: branch '$BRANCH' doesn't match required pattern."
-    echo "  Branch must start with: feat/, feature/, or fix/"
-    echo "  Example: git checkout -b feat/my-change"
+# ── Enforce branch naming ────────────────────────────────────────────────────
+# Customise this regex to match your project's conventions.
+# Default: branches must start with feat/, feature/, fix/, docs/, or refactor/
+#
+# To require work item IDs (Azure DevOps):
+#   '^(feat|feature|fix)/AB[0-9]+-'
+#
+# To require issue keys (Jira):
+#   '^(feat|feature|fix)/[A-Z]+-[0-9]+-'
+#
+if ! echo "$BRANCH" | grep -qE '^(feat|feature|fix|docs|refactor)/'; then
+    echo ""
+    echo "  ❌ pre-commit: branch '$BRANCH' doesn't match the required pattern."
+    echo ""
+    echo "  Branch must start with one of:"
+    echo ""
+    echo "    feat/<description>      — New features"
+    echo "    fix/<description>       — Bug fixes"
+    echo "    docs/<description>      — Documentation changes"
+    echo "    refactor/<description>  — Code refactoring"
+    echo ""
+    echo "  Examples:"
+    echo "    git checkout -b feat/announcement-banner"
+    echo "    git checkout -b fix/login-redirect"
+    echo "    git checkout -b docs/update-deployment-guide"
+    echo "    git checkout -b refactor/shared-utils"
+    echo ""
     exit 1
 fi
 
-# ── Helm lint ─────────────────────────────────────────────────────────────────
-
-STAGED_HELM=$(git diff --cached --name-only --diff-filter=ACM -- 'infrastructure/**' 'apps/**')
-
-if [ -n "$STAGED_HELM" ]; then
-    if ! command -v helm &>/dev/null; then
-        echo "pre-commit: helm not found, skipping Helm lint"
-    else
-        echo "pre-commit: helm lint on modified charts..."
-        # Find unique chart directories from staged files
-        CHARTS=$(echo "$STAGED_HELM" | sed 's|/[^/]*$||' | sort -u | while read dir; do
-            if [ -f "$dir/Chart.yaml" ]; then
-                echo "$dir"
-            fi
-        done)
-        for chart in $CHARTS; do
-            echo "  linting $chart..."
-            helm lint "$chart" --quiet
-        done
-    fi
-fi
+# ── Add project-specific linting below ────────────────────────────────────────
+# Examples:
+#
+# Python (ruff):
+#   STAGED_PY=$(git diff --cached --name-only --diff-filter=ACM -- '*.py')
+#   if [ -n "$STAGED_PY" ]; then
+#       echo "$STAGED_PY" | xargs ruff check --fix --quiet
+#       echo "$STAGED_PY" | xargs ruff format --quiet
+#       echo "$STAGED_PY" | xargs git add
+#   fi
+#
+# Helm:
+#   STAGED_HELM=$(git diff --cached --name-only --diff-filter=ACM -- 'helm/**')
+#   if [ -n "$STAGED_HELM" ]; then
+#       helm lint helm/<chart-name> --quiet
+#   fi
+#
+# Node.js (ESLint):
+#   STAGED_JS=$(git diff --cached --name-only --diff-filter=ACM -- '*.ts' '*.tsx')
+#   if [ -n "$STAGED_JS" ]; then
+#       npx eslint $STAGED_JS --fix
+#       echo "$STAGED_JS" | xargs git add
+#   fi

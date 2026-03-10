@@ -8,9 +8,8 @@ Brief description of the changes.
 
 ## Test Plan
 
-- [ ] `helm lint` passes for affected charts
-- [ ] `helm template` renders correctly
-- [ ] Tested on local cluster (if applicable)
+- [ ] Tested locally
+- [ ] CI checks pass
 
 ## Related Issues
 
