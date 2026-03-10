@@ -24,6 +24,6 @@ What actually happened.
 
 ## Environment
 
-- OS:
-- Version:
-- Other relevant info:
+- Kubernetes version:
+- Helm version:
+- Cluster type (e.g. EKS, Docker Desktop, k3s):
