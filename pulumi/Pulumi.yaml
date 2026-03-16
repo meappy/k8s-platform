@@ -1,0 +1,7 @@
+name: k8s-platform
+runtime: nodejs
+description: DigitalOcean Kubernetes platform infrastructure
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: kubernetes-typescript
