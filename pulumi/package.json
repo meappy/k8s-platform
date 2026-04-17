@@ -7,7 +7,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@pulumi/digitalocean": "^4.0.0",
+    "@pulumi/digitalocean": "^4.64.1",
     "@pulumi/kubernetes": "^4.0.0",
     "@pulumi/pulumi": "^3.0.0"
   },

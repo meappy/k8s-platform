@@ -1,0 +1,35 @@
+descheduler:
+  # Run every 5 minutes as a CronJob
+  kind: CronJob
+  schedule: "*/5 * * * *"
+
+  deschedulerPolicy:
+    profiles:
+      - name: default
+        pluginConfig:
+          # Evict pods from overutilised nodes
+          - name: LowNodeUtilization
+            args:
+              thresholds:
+                cpu: 20
+                memory: 20
+                pods: 15
+              targetThresholds:
+                cpu: 50
+                memory: 50
+                pods: 30
+          # Remove pods stuck in a Pending state for too long
+          - name: RemovePodsHavingTooManyRestarts
+            args:
+              podRestartThreshold: 10
+              includingInitContainers: true
+          # Remove duplicate pods on same node (spread across nodes)
+          - name: RemoveDuplicates
+        plugins:
+          balance:
+            enabled:
+              - LowNodeUtilization
+              - RemoveDuplicates
+          deschedule:
+            enabled:
+              - RemovePodsHavingTooManyRestarts
