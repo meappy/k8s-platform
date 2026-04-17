@@ -8,7 +8,7 @@ interface ClusterArgs {
 export function createCluster(args: ClusterArgs) {
     // Resolve the latest 1.31.x Kubernetes version
     const k8sVersions = digitalocean.getKubernetesVersionsOutput({
-        versionPrefix: "1.32.",
+        versionPrefix: "1.33.",  // Step upgrade: 1.32→1.33→1.34→1.35 (DO requires one minor at a time)
     });
 
     const cluster = new digitalocean.KubernetesCluster("k8s-platform-prod", {
@@ -29,7 +29,7 @@ export function createCluster(args: ClusterArgs) {
             nodeCount: 3,
             autoScale: true,
             minNodes: 2,
-            maxNodes: 4,
+            maxNodes: 5,
             labels: {
                 "nodepool": "default",
             },
