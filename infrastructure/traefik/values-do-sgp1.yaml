@@ -1,0 +1,123 @@
+additionalArguments:
+- --api.dashboard=true
+- --api.insecure=true
+- --entrypoints.web.proxyProtocol.insecure
+- --entrypoints.websecure.proxyProtocol.insecure
+- --entrypoints.minecraft.proxyProtocol.insecure
+- --entrypoints.mcdragons.proxyProtocol.insecure
+- --entrypoints.minecraft-alt.proxyProtocol.insecure
+- --entrypoints.minecraft-temp.proxyProtocol.insecure
+deployment:
+  replicas: 1
+ingressRoute:
+  dashboard:
+    enabled: false
+logs:
+  access:
+    enabled: true
+  general:
+    level: INFO
+ports:
+  bedrock:
+    expose: true
+    exposedPort: 19132
+    port: 19132
+    protocol: UDP
+  minecraft:
+    expose: true
+    exposedPort: 25565
+    port: 25565
+    protocol: TCP
+    proxyProtocol:
+      trustedIPs:
+      - 10.100.0.0/16
+      - 10.244.0.0/16
+  mcdragons:
+    expose: true
+    exposedPort: 25566
+    port: 25566
+    protocol: TCP
+    proxyProtocol:
+      trustedIPs:
+      - 10.100.0.0/16
+      - 10.244.0.0/16
+  # NEW — for the modded server after we swap it off the default port.
+  minecraft-alt:
+    expose: true
+    exposedPort: 25567
+    port: 25567
+    protocol: TCP
+    proxyProtocol:
+      trustedIPs:
+      - 10.100.0.0/16
+      - 10.244.0.0/16
+  # NEW — Bedrock alt port for the modded server.
+  bedrock-alt:
+    expose: true
+    exposedPort: 19133
+    port: 19133
+    protocol: UDP
+  # TEMP — Java port for the new vanilla server during initial verification,
+  # removed after the swap completes.
+  minecraft-temp:
+    expose: true
+    exposedPort: 25568
+    port: 25568
+    protocol: TCP
+    proxyProtocol:
+      trustedIPs:
+      - 10.100.0.0/16
+      - 10.244.0.0/16
+  # TEMP — Bedrock port for the new vanilla server during initial verification.
+  bedrock-temp:
+    expose: true
+    exposedPort: 19134
+    port: 19134
+    protocol: UDP
+  traefik:
+    expose: false
+    port: 9000
+  web:
+    expose: true
+    exposedPort: 80
+    port: 8000
+    protocol: TCP
+    proxyProtocol:
+      trustedIPs:
+      - 10.100.0.0/16
+      - 10.244.0.0/16
+  websecure:
+    expose: true
+    exposedPort: 443
+    port: 8443
+    protocol: TCP
+    proxyProtocol:
+      trustedIPs:
+      - 10.100.0.0/16
+      - 10.244.0.0/16
+    tls:
+      enabled: true
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+    publishedService:
+      enabled: true
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+service:
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
+    service.beta.kubernetes.io/do-loadbalancer-name: k8s-platform-lb
+    service.beta.kubernetes.io/do-loadbalancer-protocol: tcp
+    service.beta.kubernetes.io/do-loadbalancer-size-unit: "1"
+  type: LoadBalancer
+serviceAccount:
+  automountServiceAccountToken: true
