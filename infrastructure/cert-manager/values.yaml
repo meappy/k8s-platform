@@ -24,3 +24,12 @@ cert-manager:
 
   # Replica count (single node cluster)
   replicaCount: 1
+
+  # DNS-01 self-check must query public resolvers directly. This cluster's
+  # DNS SERVFAILs on SOA lookups of _acme-challenge.<zone> names (NODATA
+  # responses get black-holed upstream), so cert-manager's default
+  # authoritative self-check never completes and challenges hang 'pending'.
+  # Bypass the cluster resolver for the propagation check only.
+  extraArgs:
+    - --dns01-recursive-nameservers-only
+    - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
